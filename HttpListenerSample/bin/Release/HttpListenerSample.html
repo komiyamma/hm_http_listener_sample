@@ -38,11 +38,11 @@ function initPort(port) {
 
 }
 
-function updateFetch(text) {
-    text = text ?? "";
+function updateFetch(param) {
+    param = param ?? "";
     let port = global_port;
     try {
-		fetch("http://localhost:" + port)
+		fetch("http://localhost:" + port + "?param=" + param)
 		  .then(response => response.text())
 		  .then(data => {
 		    let panel = document.getElementById("update_panel");
@@ -100,7 +100,7 @@ function postToServer() {
 <div id="status_panel">
 </div>
 <h3>↓エディタ側のjavascript⇒ブラウザ枠</h3>
-<button onclick="updateFetch('direct')">受信</button>
+<button onclick="updateFetch('受信ボタンおしての直接要求')">受信</button>
 <div id="update_panel">
 </div>
 <br>

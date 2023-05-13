@@ -66,7 +66,10 @@ function onPostRequestFunc(text) {
 // テキストを要求する関数。POST意外は基本これを渡す。
 // ようするに、javascriptエンジンから、ブラウザ枠へと値を伝達するためのもの。
 function onTextRequestFunc(param) {
-    return "現在のテキストの長さ(wcs):" + hm.Edit.TotalText.length;
+    if (param) {
+        hm.OutputPane.Output("param に「" + decodeURI(param) + "」が渡ってきました\r\n");
+    }
+    return "現在のテキストの長さ(wcs):" + hm.Edit.TotalText.length + "\r\n";
 }
 
 // 本題。 httpListnerの生成。JavaScriptから、
@@ -223,7 +226,7 @@ async function initBrowserPane() {
     browserpanecommand(
         {
             target: target_browser,
-            url: target_html_file,
+            url: target_html_file + "?param=a&bbb=ccc#aaaaa",
             show: 1,
             size: target_browser_size
         }

@@ -145,11 +145,30 @@ public class HttpListnerSample
                         // レスポンス取得
                         HttpListenerResponse response = context.Response;
 
+                        string hm_param = "";
+                        // GETパラメータを処理する
+                        string[] rawParams = request.RawUrl.Split('?');
+                        if (rawParams.Length > 1)
+                        {
+                            string[] queryParams = rawParams[1].Split('&');
+
+                            foreach (string param in queryParams)
+                            {
+                                string[] keyValue = param.Split('=');
+                                string key = keyValue[0];
+                                if (key == "param")
+                                {
+                                    string value = keyValue[1];
+                                    hm_param = value;
+                                    break;
+                                }
+                            }
+                        }
 
                         // HTMLを表示する
                         if (request != null)
                         {
-                            string hmtext = this.onTextRequestFunc();
+                            string hmtext = this.onTextRequestFunc(hm_param);
                             byte[] text = Encoding.UTF8.GetBytes(hmtext);
                             response.ContentType = "text/plain; charset=utf-8";
                             response.ContentEncoding = Encoding.UTF8;

@@ -9,3 +9,14 @@ G:\bbbb\HttpListenerSample\HttpListenerSample\bin\Release\hmV8.dll
 G:\bbbb\HttpListenerSample\HttpListenerSample\bin\Release\ClearScript.V8.dll
 G:\bbbb\HttpListenerSample\HttpListenerSample\bin\Release\ClearScript.Core.dll
 G:\bbbb\HttpListenerSample\HttpListenerSample\obj\Release\HttpListenerSample.csproj.CopyComplete
+G:\repogitory\hm_http_listener_sample\HttpListenerSample\bin\Release\HttpListenerSample.dll.config
+G:\repogitory\hm_http_listener_sample\HttpListenerSample\bin\Release\HttpListenerSample.dll
+G:\repogitory\hm_http_listener_sample\HttpListenerSample\bin\Release\HttpListenerSample.pdb
+G:\repogitory\hm_http_listener_sample\HttpListenerSample\bin\Release\hmV8.dll
+G:\repogitory\hm_http_listener_sample\HttpListenerSample\bin\Release\ClearScript.V8.dll
+G:\repogitory\hm_http_listener_sample\HttpListenerSample\bin\Release\ClearScript.Core.dll
+G:\repogitory\hm_http_listener_sample\HttpListenerSample\obj\Release\HttpListenerSample.csproj.AssemblyReference.cache
+G:\repogitory\hm_http_listener_sample\HttpListenerSample\obj\Release\HttpListenerSample.csproj.CoreCompileInputs.cache
+G:\repogitory\hm_http_listener_sample\HttpListenerSample\obj\Release\HttpListenerSample.csproj.CopyComplete
+G:\repogitory\hm_http_listener_sample\HttpListenerSample\obj\Release\HttpListenerSample.dll
+G:\repogitory\hm_http_listener_sample\HttpListenerSample\obj\Release\HttpListenerSample.pdb
