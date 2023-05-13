@@ -1,0 +1,85 @@
+<html>
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+<script>
+let global_port = 0;
+
+window.onload = function() {
+    let port = sessionStorage.getItem('HttpListnerPort');
+    if (port) {
+        global_port = port + 0;
+    }
+}
+
+function initPort(port) {
+    global_port = port;
+    // 値をセッションストレージに保存する
+    sessionStorage.setItem("HttpListnerPort", port);
+
+    let panel = document.getElementById("update_panel");
+    panel.innerText = port + "で接続";
+
+}
+
+function updateFetch() {
+    let port = global_port;
+    try {
+		fetch("http://localhost:" + port)
+		  .then(response => response.text())
+		  .then(data => {
+		    let panel = document.getElementById("update_panel");
+		    panel.innerHTML = data.toString();
+		  })
+		  .catch(error => {
+		  });
+    } catch(e) {
+    }
+}
+
+function postToServer() {
+    let port = global_port;
+    if (port != 0) {
+
+		// 送信するデータ(どうせテキストにする)
+		let jsonData = {
+		  key1: 'value1はかきくけこ',
+		  key2: 'value2それはどうですぞ？',
+		};
+
+        let inputData = document.getElementById("inputData").value;
+        jsonData.key2 = inputData;
+
+		// XMLHttpRequestオブジェクトを作成する
+		var xhr = new XMLHttpRequest();
+
+		// POSTメソッド、送信先URL、非同期通信であることを指定する
+		xhr.open('POST', "http://localhost:" + port, true);
+
+		// Content-TypeとしてTEXTを指定する
+		xhr.setRequestHeader('Content-Type', 'text/plain');
+
+		// JSONデータをJSON文字列に変換して送信する
+		xhr.send(JSON.stringify(jsonData));
+
+	    let panel = document.getElementById("update_panel");
+	    panel.innerHTML = "送信ボタンを押した";
+	}
+	else {
+	    let panel = document.getElementById("update_panel");
+	    panel.innerHTML = "送信ボタンを押してない";
+    }
+}
+</script>
+<h3>↓エディタ側のjavascript⇒ブラウザ枠</h3>
+<div id="update_panel">
+</div>
+<br>
+<h3>↓ブラウザ枠⇒エディタ側のjavascriptへ</h3>
+<button onclick="postToServer()">送信</button>
+<br>
+<input type="text" id="inputData" value="ここになんか入力"></input>
+<br>
+</body>
+</html>

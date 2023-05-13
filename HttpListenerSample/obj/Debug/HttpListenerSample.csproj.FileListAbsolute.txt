@@ -1,0 +1,3 @@
+G:\bbbb\HttpListenerSample\HttpListenerSample\obj\Debug\HttpListenerSample.csproj.AssemblyReference.cache
+G:\bbbb\HttpListenerSample\HttpListenerSample\obj\Debug\HttpListenerSample.csproj.SuggestedBindingRedirects.cache
+G:\bbbb\HttpListenerSample\HttpListenerSample\obj\Debug\HttpListenerSample.csproj.CoreCompileInputs.cache

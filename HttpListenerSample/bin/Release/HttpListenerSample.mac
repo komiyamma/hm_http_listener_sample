@@ -1,0 +1,66 @@
+﻿hidemaruversion("9.22.16");
+
+
+//-----------------------------------------------------------------------------
+#V8 = loaddll( hidemarudir + @"\hmV8.dll" );
+if ( !#V8 ) { message "hmV8.dllが読み込めない"; }
+ 
+#r = dllfuncw( #V8, "DoString", 
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
+
+// hidemaru.createHttpListner みたいな
+
+function createHttpListner(postReqFunc, otherReqFunc) {
+	let lib = host.lib(currentmacrodirectory() + "\\HttpListenerSample.dll");
+    return new lib.HttpListnerSample(postReqFunc, otherReqFunc);
+}
+
+// このプロセスで初実行
+if (typeof(listner) === "undefined") {
+    var listner = null;
+    var port = null;
+} else {
+    // 再実行した際に前回分を破棄しているだけ。
+    listner.Close();
+    port = 0;
+}
+
+
+
+function onPostRequestFunc(text) {
+    hm.OutputPane.Output("通信相手からこの(プロセス空間 & スクリプトエンジン空間)に受信しました\r\n");
+    hm.OutputPane.Output("受け取ったテキストは「" +  text + "」\r\n");
+    // hmV8は同期用なので、非同期の「マクロ関数」を持っていないので、これ以上あまりできないが、jsmode で同様のものを実装すれば、
+    // 将来非同期で道具が増えてくるので、いろいろできるだろう。
+
+    let json = JSON.parse(text);
+    hm.OutputPane.Output("JSONとして解釈。key1:" + json.key1 + "\r\n");
+    hm.OutputPane.Output("JSONとして解釈。key2:" + json.key2 + "\r\n");
+    
+}
+
+let count = 0;
+function onRequestFunc() {
+    return "あいうえお:" + count++;
+}
+
+listner = createHttpListner(onPostRequestFunc, onRequestFunc);
+port = listner.Start(7500, 20000);
+hm.Macro.Var["#PORT"] = port;
+hm.OutputPane.Output(port);
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
+);
+
+//-----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+jsmode "WebView2";
+execjs currentmacrodirectory + @"\HttpListenerSample.js";
