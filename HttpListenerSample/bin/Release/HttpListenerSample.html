@@ -18,6 +18,7 @@ window.onload = function() {
     }
 
     else {
+		// デバッグ用。外部ブラウザなどでURIからglobal_portにポート番号を代入するため。
 		let url = new URL(window.location.href);
 
 		// URLSearchParamsオブジェクトを取得
@@ -38,6 +39,7 @@ function initPort(port) {
 
 }
 
+// エディタプロセス ⇒ ブラウザ枠へ ⇒ エディタが建てたHttpListenerに内容を貰う
 function updateFetch(param) {
     param = param ?? "";
     let port = global_port;
@@ -54,11 +56,12 @@ function updateFetch(param) {
     }
 }
 
+// ブラウザ枠⇒エディタプロセスへとテキストデータを送る
 function postToServer() {
     let port = global_port;
     if (port != 0) {
 
-		// 送信するデータ(どうせテキストにする)
+		// 送信するデータ(jsonと縛ったりはしない。ただのテキストにする。受け側が判断する。)
 		let jsonData = {
 		  key1: 'value1はかきくけこ',
 		  key2: 'value2それはどうですぞ？',
