@@ -20,10 +20,12 @@ function createHttpListner(postReqFunc, otherReqFunc) {
 if (typeof(listner) === "undefined") {
     var listner = null;
     var port = null;
+    var count = 0;
 } else {
     // 再実行した際に前回分を破棄しているだけ。
     listner.Close();
     port = 0;
+    count = 0;
 }
 
 
@@ -40,7 +42,6 @@ function onPostRequestFunc(text) {
     
 }
 
-let count = 0;
 function onRequestFunc() {
     return "あいうえお:" + count++;
 }

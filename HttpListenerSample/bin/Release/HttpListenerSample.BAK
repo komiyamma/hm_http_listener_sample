@@ -7,23 +7,27 @@
 let global_port = 0;
 
 window.onload = function() {
-    let port = sessionStorage.getItem('HttpListnerPort');
+    // portsをセッションストレージから復元する
+    let port = sessionStorage.getItem('port');
     if (port) {
-        // global_port = port + 0;
+        global_port = Number(port);
+
+	    let panel = document.getElementById("update_panel");
+	    panel.innerText = port + "で接続";
     }
 }
 
 function initPort(port) {
     global_port = port;
-    // 値をセッションストレージに保存する
-    // sessionStorage.setItem("HttpListnerPort", port);
+    // portをセッションストレージに保存する
+    sessionStorage.setItem("port", port);
 
     let panel = document.getElementById("update_panel");
-    panel.innerText = port + "で接続";
+    panel.innerText = port_test + "で接続";
 
 }
 
-function updateFetch() {
+function updateFetch(current_port) {
     let port = global_port;
     try {
 		fetch("http://localhost:" + port)
