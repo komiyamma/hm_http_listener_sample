@@ -1,3 +1,14 @@
 G:\bbbb\HttpListenerSample\HttpListenerSample\obj\Debug\HttpListenerSample.csproj.AssemblyReference.cache
 G:\bbbb\HttpListenerSample\HttpListenerSample\obj\Debug\HttpListenerSample.csproj.SuggestedBindingRedirects.cache
 G:\bbbb\HttpListenerSample\HttpListenerSample\obj\Debug\HttpListenerSample.csproj.CoreCompileInputs.cache
+G:\repogitory\hm_http_listener_sample\HttpListenerSample\bin\Debug\HttpListenerSample.dll.config
+G:\repogitory\hm_http_listener_sample\HttpListenerSample\bin\Debug\HttpListenerSample.dll
+G:\repogitory\hm_http_listener_sample\HttpListenerSample\bin\Debug\HttpListenerSample.pdb
+G:\repogitory\hm_http_listener_sample\HttpListenerSample\bin\Debug\hmV8.dll
+G:\repogitory\hm_http_listener_sample\HttpListenerSample\bin\Debug\ClearScript.V8.dll
+G:\repogitory\hm_http_listener_sample\HttpListenerSample\bin\Debug\ClearScript.Core.dll
+G:\repogitory\hm_http_listener_sample\HttpListenerSample\obj\Debug\HttpListenerSample.csproj.AssemblyReference.cache
+G:\repogitory\hm_http_listener_sample\HttpListenerSample\obj\Debug\HttpListenerSample.csproj.CoreCompileInputs.cache
+G:\repogitory\hm_http_listener_sample\HttpListenerSample\obj\Debug\HttpListenerSample.csproj.CopyComplete
+G:\repogitory\hm_http_listener_sample\HttpListenerSample\obj\Debug\HttpListenerSample.dll
+G:\repogitory\hm_http_listener_sample\HttpListenerSample\obj\Debug\HttpListenerSample.pdb

@@ -1,6 +1,7 @@
 ﻿hidemaruversion("9.22.16");
 
 
+// ここに相当する内容をネイティブ+ HidemacJsGlobal.js 
 //-----------------------------------------------------------------------------
 #V8 = loaddll( hidemarudir + @"\hmV8.dll" );
 if ( !#V8 ) { message "hmV8.dllが読み込めない"; }
@@ -9,14 +10,30 @@ if ( !#V8 ) { message "hmV8.dllが読み込めない"; }
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 
+
 // hidemaru.createHttpListner みたいな
-
-function createHttpListner(postReqFunc, otherReqFunc) {
+// HttpListnerの生成。外部からこのリスナーにPOSTがあれば、
+// postRefuncをtextを引数として呼び出す、返り値には、ステータスを返すことも出来る(返さなければ200)
+// 普通のリクエストの際は、文字列を返す関数のtextReqFuncを呼び出す。
+function createHttpListner(postReqFunc, textReqFunc) {
 	let lib = host.lib(currentmacrodirectory() + "\\HttpListenerSample.dll");
-    return new lib.HttpListnerSample(postReqFunc, otherReqFunc);
+    return new lib.HttpListnerSample(postReqFunc, textReqFunc);
 }
+""""""""""""""""""""""""""""""""""""""""""""""""""
+);
 
-// このプロセスで初実行
+
+
+
+
+
+
+
+
+
+#r = dllfuncw( #V8, "DoString", 
+""""""""""""""""""""""""""""""""""""""""""""""""""
+// このプロセスで初実行。JSエンジンが生存している間、有効な変数にしているだめ。
 if (typeof(listner) === "undefined") {
     var listner = null;
     var port = null;
@@ -29,27 +46,41 @@ if (typeof(listner) === "undefined") {
 }
 
 
-
+// 本題。
+// 
+// リスナーにPOSTが来た際に呼び出してもらう関数用。
+// 要するにブラウザ枠やブラウザから、javascriptエンジンへとデータを伝達するためのもの。
+// POSTで渡ってきた値(テキスト)がそのまま関数にわたってくる。
+// 返り値を設定すれば、それがPOSTに対するステータスになる。(なんか大失敗している時は、ステータスにそれをわかる数値をかえせばよい)
 function onPostRequestFunc(text) {
     hm.OutputPane.Output("通信相手からこの(プロセス空間 & スクリプトエンジン空間)に受信しました\r\n");
     hm.OutputPane.Output("受け取ったテキストは「" +  text + "」\r\n");
-    // hmV8は同期用なので、非同期の「マクロ関数」を持っていないので、これ以上あまりできないが、jsmode で同様のものを実装すれば、
-    // 将来非同期で道具が増えてくるので、いろいろできるだろう。
+    // hmV8は「同期用」なので、非同期の「マクロ関数」を持っていないので、これ以上秀丸機能の引き出すことはあまりできないが、
+    // jsmode で同様のものを実装すれば、将来非同期で道具が増えてくるので、いろいろできるだろう。
 
     let json = JSON.parse(text);
     hm.OutputPane.Output("JSONとして解釈。key1:" + json.key1 + "\r\n");
     hm.OutputPane.Output("JSONとして解釈。key2:" + json.key2 + "\r\n");
-    
 }
 
-function onRequestFunc() {
-    return "あいうえお:" + count++;
+// テキストを要求する関数。POST意外は基本これを渡す。
+// ようするに、javascriptエンジンから、ブラウザ枠へと値を伝達するためのもの。
+function onTextRequestFunc(param) {
+    return "現在のテキストの長さ(wcs):" + hm.Edit.TotalText.length;
 }
 
-listner = createHttpListner(onPostRequestFunc, onRequestFunc);
+// 本題。 httpListnerの生成。JavaScriptから、
+// ・POSTを受け取った時に処理する関数
+// ・普通のリクエスト受け取った時に表示するテキスト内容を返す関数を渡す。
+listner = createHttpListner(onPostRequestFunc, onTextRequestFunc);
+
+// 上の引数に含めてしまった方がよいがここが１つか２つかは本題とは無関係
+// portを指定するが埋まっていることも多いので、「最小port」と「最大port」を指定する。
+// その指定範囲で空いてるポートが見つからなければ、0が返る。
 port = listner.Start(7500, 20000);
-hm.Macro.Var["#PORT"] = port;
-hm.OutputPane.Output(port);
+
+// 本題とは無関係。v8⇒マクロ空間へ
+setVar("#PORT", port);
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 );
@@ -64,4 +95,157 @@ hm.OutputPane.Output(port);
 
 
 jsmode "WebView2";
-execjs currentmacrodirectory + @"\HttpListenerSample.js";
+
+js {
+
+
+
+debuginfo(2);
+
+var port = getVar("#PORT");
+
+let target_html_file = currentmacrodirectory() + "\\HttpListenerSample.html";
+
+let target_browser = "_each";
+let target_browser_size = 300;
+
+// sleep 相当。ECMAScript には sleep が無いので。
+function sleep_in_tick(ms) {
+    return new Promise(resolve => hidemaru.setTimeout(resolve, ms));
+}
+
+function tickMethod() {
+
+    try {
+
+        // (他の)マクロ実行中は安全のため横槍にならないように何もしない。
+        if (hidemaru.isMacroExecuting()) {
+            return;
+        }
+
+        // この操作対象中は、javascriptによる更新しない。何が起こるかわからん
+        if (isNotDetectedOperation()) {
+            return;
+        }
+
+        // 本来は状況を感知してアップデート等、javascriptで伝達
+        browserpanecommand(
+            {
+                target: target_browser,
+                url: `javascript:updateFetch()`,
+            }
+        );
+    } catch (e) {
+    }
+}
+
+// ここは本題とは無関係。単純にブラウザ枠やエディタペインのテキストを取得しても大丈夫なタイミングを掴むため。
+function isNotDetectedOperation() {
+    /*
+    ○ 0x00000002 ウィンドウ移動/サイズ変更中
+    × 0x00000004 メニュー操作中
+    × 0x00000008 システムメニュー操作中
+    × 0x00000010 ポップアップメニュー操作中
+    ○ 0x00000100 IME入力中
+    × 0x00000200 何らかのダイアログ表示中
+    × 0x00000400 ウィンドウがDisable状態
+    × 0x00000800 非アクティブなタブまたは非表示のウィンドウ
+    × 0x00001000 検索ダイアログの疑似モードレス状態
+    ○ 0x00002000 なめらかスクロール中
+    ○ 0x00004000 中ボタンによるオートスクロール中
+    ○ 0x00008000 キーやマウスの操作直後
+    ○ 0x00010000 何かマウスのボタンを押している
+    × 0x00020000 マウスキャプチャ状態(ドラッグ状態)
+    ○ 0x00040000 Hidemaru_CheckQueueStatus相当
+    */
+    let istatus = hidemaru.getInputStates();
+    let during_window_move_resize = istatus & 0x00000002;
+    if (during_window_move_resize) {
+    }
+    let during_menu_operation = istatus & 0x00000004;
+    if (during_menu_operation) {
+        return true;
+    }
+    let during_system_menu_operation = istatus & 0x00000008;
+    if (during_system_menu_operation) {
+        return true;
+    }
+    let during_popup_menu_operation = istatus & 0x00000010;
+    if (during_popup_menu_operation) {
+        return true;
+    }
+    let during_ime_input = istatus & 0x00000100;
+    if (during_ime_input) {
+    }
+    let during_dialog_display = istatus & 0x00000200;
+    if (during_dialog_display) {
+        return true;
+    }
+    let during_disable_window = istatus & 0x00000400;
+    if (during_disable_window) {
+        return true;
+    }
+    let during_non_active_window = istatus & 0x00000800;
+    if (during_non_active_window) {
+        return true;
+    }
+    let during_smooth_scroll = istatus & 0x00002000;
+    if (during_smooth_scroll) {
+        // console.log("during_smooth_scroll" + "\r\n");
+    }
+    let during_middle_button_scroll = istatus & 0x00004000;
+    if (during_middle_button_scroll) {
+    }
+    let during_key_mouse_operation = istatus & 0x00008000;
+    if (during_key_mouse_operation) {
+    }
+    let during_mouse_button_press = istatus & 0x00010000;
+    if (during_mouse_button_press) {
+    }
+    let during_mouse_drag = istatus & 0x00020000;
+    if (during_mouse_drag) {
+        return true;
+    }
+    let during_hidemaru_queue = istatus & 0x00040000;
+    if (during_hidemaru_queue) {
+    }
+    return false;
+}
+
+if (typeof (timerHandle) === "undefined") {
+    var timerHandle = 0;
+}
+
+hidemaru.clearInterval(timerHandle);
+
+async function initBrowserPane() {
+    // ブラウザ枠表示
+    browserpanecommand(
+        {
+            target: target_browser,
+            url: target_html_file,
+            show: 1,
+            size: target_browser_size
+        }
+    );
+
+    await sleep_in_tick(600);
+
+    // ポート番号の伝達
+    browserpanecommand(
+        {
+            target: target_browser,
+            url: `javascript:initPort(${port})`,
+            size: target_browser_size
+        }
+    );
+}
+
+// ここ await していないので、次のsetIntervalの後に跨がないように注意
+initBrowserPane();
+
+timerHandle = hidemaru.setInterval(tickMethod, 1000);
+
+
+
+}

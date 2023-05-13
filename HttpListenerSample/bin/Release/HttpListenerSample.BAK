@@ -7,30 +7,42 @@
 let global_port = 0;
 
 window.onload = function() {
+
     // portsをセッションストレージから復元する
     let port = sessionStorage.getItem('port');
     if (port) {
         global_port = Number(port);
 
-	    let panel = document.getElementById("update_panel");
+	    let panel = document.getElementById("report_panel");
 	    panel.innerText = port + "で接続";
+    }
+
+    else {
+		let url = new URL(window.location.href);
+
+		// URLSearchParamsオブジェクトを取得
+		let params = url.searchParams;
+
+		// getメソッド
+		global_port = params.get('port');
     }
 }
 
 function initPort(port) {
     global_port = port;
     // portをセッションストレージに保存する
-    sessionStorage.setItem("port", port);
+    sessionStorage.setItem("port", String(port));
 
-    let panel = document.getElementById("update_panel");
+    let panel = document.getElementById("report_panel");
     panel.innerText = port_test + "で接続";
 
 }
 
-function updateFetch(current_port) {
+function updateFetch(text) {
+    text = text ?? "";
     let port = global_port;
     try {
-		fetch("http://localhost:" + port)
+		fetch("http://localhost:" + port + "?param=direct")
 		  .then(response => response.text())
 		  .then(data => {
 		    let panel = document.getElementById("update_panel");
@@ -67,16 +79,28 @@ function postToServer() {
 		// JSONデータをJSON文字列に変換して送信する
 		xhr.send(JSON.stringify(jsonData));
 
-	    let panel = document.getElementById("update_panel");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+			    let panel = document.getElementById("status_panel");
+			    panel.innerText = "POSTの結果のステータスは" + xhr.status;
+            }
+        };
+
+	    let panel = document.getElementById("report_panel");
 	    panel.innerHTML = "送信ボタンを押した";
 	}
 	else {
-	    let panel = document.getElementById("update_panel");
+	    let panel = document.getElementById("report_panel");
 	    panel.innerHTML = "送信ボタンを押してない";
     }
 }
 </script>
+<div id="report_panel">
+</div>
+<div id="status_panel">
+</div>
 <h3>↓エディタ側のjavascript⇒ブラウザ枠</h3>
+<button onclick="updateFetch('direct')">受信</button>
 <div id="update_panel">
 </div>
 <br>
@@ -84,6 +108,7 @@ function postToServer() {
 <button onclick="postToServer()">送信</button>
 <br>
 <input type="text" id="inputData" value="ここになんか入力"></input>
+<br>
 <br>
 </body>
 </html>

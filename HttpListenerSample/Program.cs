@@ -44,12 +44,12 @@ public class HttpListnerSample
     int port = 0;
 
     dynamic onPostRequestFunc = null;
-    dynamic onRequestFunc = null;
+    dynamic onTextRequestFunc = null;
 
-    public HttpListnerSample(dynamic onPostRequestFunc, dynamic onRequestFunc)
+    public HttpListnerSample(dynamic onPostRequestFunc, dynamic onTextRequestFunc)
     {
         this.onPostRequestFunc = onPostRequestFunc;
-        this.onRequestFunc = onRequestFunc;
+        this.onTextRequestFunc = onTextRequestFunc;
     }
 
 
@@ -119,18 +119,24 @@ public class HttpListnerSample
                     // リクエストのHTTPメソッドがPOSTである場合のみ、リクエストボディからデータを読み取る
                     if (request.HttpMethod == "POST")
                     {
+                        int status = 200;
                         using (StreamReader reader = new StreamReader(request.InputStream, Encoding.UTF8))
                         {
                             // リクエストボディから文字列を読み取る
                             string text = reader.ReadToEnd();
 
                             // 受信したテキスト文字列をコンソールに出力する
-                            onPostRequestFunc(text);
+                            int? temp_status = onPostRequestFunc(text);
+                            if (temp_status.HasValue)
+                            {
+                                status = temp_status.Value;
+                            }
                         }
 
                         // レスポンス取得
                         HttpListenerResponse response = context.Response;
-                        response.StatusCode = 200;
+
+                        response.StatusCode = status;
 
                         response.Close();
                     }
@@ -139,12 +145,13 @@ public class HttpListnerSample
                         // レスポンス取得
                         HttpListenerResponse response = context.Response;
 
+
                         // HTMLを表示する
                         if (request != null)
                         {
-                            string hmtext = this.onRequestFunc();
+                            string hmtext = this.onTextRequestFunc();
                             byte[] text = Encoding.UTF8.GetBytes(hmtext);
-                            response.ContentType = "text/html; charset=utf-8";
+                            response.ContentType = "text/plain; charset=utf-8";
                             response.ContentEncoding = Encoding.UTF8;
                             response.OutputStream.Write(text, 0, text.Length);
                         }
