@@ -125,11 +125,16 @@ public class HttpListnerSample
                             // リクエストボディから文字列を読み取る
                             string text = reader.ReadToEnd();
 
-                            // 受信したテキスト文字列をコンソールに出力する
-                            int? temp_status = onPostRequestFunc(text);
-                            if (temp_status.HasValue)
+                            try { 
+                                // 整数がJS関数から返ってきていたら、それを代入する
+                                Object temp_status = onPostRequestFunc(text);
+                                Type t = temp_status.GetType();
+                                if (t == 200.GetType()) {
+                                    status = (int)temp_status;
+                                }
+                            } catch(Exception e)
                             {
-                                status = temp_status.Value;
+                                Trace.WriteLine(e.Message + "\r\n");
                             }
                         }
 

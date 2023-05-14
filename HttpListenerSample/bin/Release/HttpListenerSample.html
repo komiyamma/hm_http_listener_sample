@@ -7,97 +7,109 @@
 let global_port = 0;
 
 window.onload = function() {
+    try {
+	    // portsをセッションストレージから復元する
+	    let port = sessionStorage.getItem('port');
+	    if (port) {
+	        global_port = Number(port);
 
-    // portsをセッションストレージから復元する
-    let port = sessionStorage.getItem('port');
-    if (port) {
-        global_port = Number(port);
+		    let panel = document.getElementById("port_panel");
+		    panel.innerText = port + "で接続";
+	    }
 
-	    let panel = document.getElementById("report_panel");
-	    panel.innerText = port + "で接続";
-    }
+	    else {
+			// デバッグ用。外部ブラウザなどでURIからglobal_portにポート番号を代入するため。
+			let url = new URL(window.location.href);
 
-    else {
-		// デバッグ用。外部ブラウザなどでURIからglobal_portにポート番号を代入するため。
-		let url = new URL(window.location.href);
+			// URLSearchParamsオブジェクトを取得
+			let params = url.searchParams;
 
-		// URLSearchParamsオブジェクトを取得
-		let params = url.searchParams;
-
-		// getメソッド
-		global_port = params.get('port');
+			// getメソッド
+			global_port = params.get('port');
+	    }
+    } catch(e) {
     }
 }
 
 function initPort(port) {
-    global_port = port;
-    // portをセッションストレージに保存する
-    sessionStorage.setItem("port", String(port));
+    try {
+	    global_port = port;
+	    // portをセッションストレージに保存する
+	    sessionStorage.setItem("port", String(port));
 
-    let panel = document.getElementById("report_panel");
-    panel.innerText = port_test + "で接続";
-
+	    let panel = document.getElementById("port_panel");
+	    panel.innerText = port_test + "で接続";
+    } catch(e) {
+    }
 }
 
 // エディタプロセス ⇒ ブラウザ枠へ ⇒ エディタが建てたHttpListenerに内容を貰う
 function updateFetch(param) {
-    param = param ?? "";
-    let port = global_port;
     try {
-		fetch("http://localhost:" + port + "?param=" + param)
-		  .then(response => response.text())
-		  .then(data => {
-		    let panel = document.getElementById("update_panel");
-		    panel.innerHTML = data.toString();
-		  })
-		  .catch(error => {
-		  });
+	    param = param ?? "";
+	    let port = global_port;
+	    try {
+			fetch("http://localhost:" + port + "?param=" + param)
+			  .then(response => response.text())
+			  .then(data => {
+			    let panel = document.getElementById("update_panel");
+			    panel.innerHTML = data.toString();
+			  })
+			  .catch(error => {
+			  });
+	    } catch(e) {
+	    }
     } catch(e) {
     }
 }
 
 // ブラウザ枠⇒エディタプロセスへとテキストデータを送る
 function postToServer() {
-    let port = global_port;
-    if (port != 0) {
+    try {
+	    let port = global_port;
+	    if (port != 0) {
 
-		// 送信するデータ(jsonと縛ったりはしない。ただのテキストにする。受け側が判断する。)
-		let jsonData = {
-		  key1: 'value1はかきくけこ',
-		  key2: 'value2それはどうですぞ？',
-		};
+			// 送信するデータ(jsonと縛ったりはしない。ただのテキストにする。受け側が判断する。)
+			let jsonData = {
+				key1: 'value1はかきくけこ',
+				key2: 'value2それはどうですぞ？',
+			};
 
-        let inputData = document.getElementById("inputData").value;
-        jsonData.key2 = inputData;
+	        let inputData = document.getElementById("inputData").value;
+	        jsonData.key2 = inputData;
 
-		// XMLHttpRequestオブジェクトを作成する
-		var xhr = new XMLHttpRequest();
+			// XMLHttpRequestオブジェクトを作成する
+			var xhr = new XMLHttpRequest();
 
-		// POSTメソッド、送信先URL、非同期通信であることを指定する
-		xhr.open('POST', "http://localhost:" + port, true);
+			// POSTメソッド、送信先URL、非同期通信であることを指定する
+			xhr.open('POST', "http://localhost:" + port, true);
 
-		// Content-TypeとしてTEXTを指定する
-		xhr.setRequestHeader('Content-Type', 'text/plain');
+			// Content-TypeとしてTEXTを指定する
+			xhr.setRequestHeader('Content-Type', 'text/plain');
 
-		// JSONデータをJSON文字列に変換して送信する
-		xhr.send(JSON.stringify(jsonData));
+			// JSONデータをJSON文字列に変換して送信する
+			xhr.send(JSON.stringify(jsonData));
 
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-			    let panel = document.getElementById("status_panel");
-			    panel.innerText = "POSTの結果のステータスは" + xhr.status;
-            }
-        };
+	        xhr.onreadystatechange = function() {
+	            if (xhr.readyState === 4) {
+				    let panel = document.getElementById("status_panel");
+				    panel.innerText = "POSTの結果のステータスは" + xhr.status;
+	            }
+	        };
 
-	    let panel = document.getElementById("report_panel");
-	    panel.innerHTML = "送信ボタンを押した";
-	}
-	else {
-	    let panel = document.getElementById("report_panel");
-	    panel.innerHTML = "送信ボタンを押してない";
+		    let panel = document.getElementById("report_panel");
+		    panel.innerHTML = "送信ボタンを押した";
+		}
+		else {
+		    let panel = document.getElementById("report_panel");
+		    panel.innerHTML = "送信ボタンを押してない";
+	    }
+    } catch(e) {
     }
 }
 </script>
+<div id="port_panel">
+</div>
 <div id="report_panel">
 </div>
 <div id="status_panel">
