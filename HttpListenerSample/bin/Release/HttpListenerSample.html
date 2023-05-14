@@ -34,11 +34,13 @@ window.onload = function() {
 function initPort(port) {
     try {
 	    global_port = port;
+
+	    let panel = document.getElementById("port_panel");
+	    panel.innerText = port + "で接続";
+
 	    // portをセッションストレージに保存する
 	    sessionStorage.setItem("port", String(port));
 
-	    let panel = document.getElementById("port_panel");
-	    panel.innerText = port_test + "で接続";
     } catch(e) {
     }
 }
@@ -108,11 +110,11 @@ function postToServer() {
     }
 }
 </script>
-<div id="port_panel">
+<div id="port_panel">接続Port
 </div>
-<div id="report_panel">
+<div id="report_panel">レポート
 </div>
-<div id="status_panel">
+<div id="status_panel">ステータス
 </div>
 <h3>↓エディタ側のjavascript⇒ブラウザ枠</h3>
 <button onclick="updateFetch('受信ボタンおしての直接要求')">受信</button>
@@ -120,9 +122,9 @@ function postToServer() {
 </div>
 <br>
 <h3>↓ブラウザ枠⇒エディタ側のjavascriptへ</h3>
-<button onclick="postToServer()">送信</button>
+<button id="sendData" onclick="postToServer()">送信</button>
 <br>
-<input type="text" id="inputData" value="ここになんか入力"></input>
+<input id="inputData" type="text" value="ここになんか入力"></input>
 <br>
 <br>
 </body>
