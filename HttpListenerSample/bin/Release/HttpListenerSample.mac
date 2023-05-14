@@ -1,11 +1,12 @@
 ﻿hidemaruversion("9.22.16");
 
-
 // ここに相当する内容をネイティブ+ HidemacJsGlobal.js 
 //-----------------------------------------------------------------------------
 #V8 = loaddll( hidemarudir + @"\hmV8.dll" );
 if ( !#V8 ) { message "hmV8.dllが読み込めない"; }
- 
+
+
+
 #r = dllfuncw( #V8, "DoString", 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
@@ -33,6 +34,8 @@ function createHttpListner(postReqFunc, textReqFunc) {
 
 #r = dllfuncw( #V8, "DoString", 
 """"""""""""""""""""""""""""""""""""""""""""""""""
+op_print = hm.OutputPane.Output
+
 // このプロセスで初実行。JSエンジンが生存している間、有効な変数にしているだめ。
 if (typeof(listner) === "undefined") {
     var listner = null;
@@ -45,7 +48,6 @@ if (typeof(listner) === "undefined") {
     count = 0;
 }
 
-
 // 本題。
 // 
 // リスナーにPOSTが来た際に呼び出してもらう関数用。
@@ -53,14 +55,14 @@ if (typeof(listner) === "undefined") {
 // POSTで渡ってきた値(テキスト)がそのまま関数にわたってくる。
 // 返り値を設定すれば、それがPOSTに対するステータスになる。(なんか大失敗している時は、ステータスにそれをわかる数値をかえせばよい)
 function onPostRequestFunc(text) {
-    hm.OutputPane.Output("通信相手からこの(プロセス空間 & スクリプトエンジン空間)に受信しました\r\n");
-    hm.OutputPane.Output("受け取ったテキストは「" +  text + "」\r\n");
+    op_print("通信相手からこの(プロセス空間 & スクリプトエンジン空間)に受信しました\r\n");
+    op_print("受け取ったテキストは「" +  text + "」\r\n");
     // hmV8は「同期用」なので、非同期の「マクロ関数」を持っていないので、これ以上秀丸機能の引き出すことはあまりできないが、
     // jsmode で同様のものを実装すれば、将来非同期で道具が増えてくるので、いろいろできるだろう。
 
     let json = JSON.parse(text);
-    hm.OutputPane.Output("JSONとして解釈。key1:" + json.key1 + "\r\n");
-    hm.OutputPane.Output("JSONとして解釈。key2:" + json.key2 + "\r\n");
+    op_print("JSONとして解釈。key1:" + json.key1 + "\r\n");
+    op_print("JSONとして解釈。key2:" + json.key2 + "\r\n");
 
     return 201;
 }
@@ -69,7 +71,7 @@ function onPostRequestFunc(text) {
 // ようするに、javascriptエンジンから、ブラウザ枠へと値を伝達するためのもの。
 function onTextRequestFunc(param) {
     if (param) {
-        hm.OutputPane.Output("param に「" + decodeURI(param) + "」が渡ってきました\r\n");
+        op_print("param に「" + decodeURI(param) + "」が渡ってきました\r\n");
     }
     return "エディタペインの文字列の長さ(wcs):" + hm.Edit.TotalText.length + "\r\n";
 }
