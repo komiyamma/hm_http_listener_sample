@@ -39,7 +39,7 @@ v9.22 である必要はないですが、v9.23以降どんどん非同期関数
   - 新規ファイルを作成して、適当に文字列を入力
   - HttpListenerSample.mac を実行
 
-# 中身を見ていく
+# 中身の説明
 
 # HttpListenerSample.mac
 
@@ -137,7 +137,7 @@ param に 何かステータスを伝えるためのシンボル的なものを�
 パラメータやcallback用の関数の渡し方は、hideamru.runProcessあたりと似た感じにすればよいのではないでしょうか。  
 
 
-# 他も見ていく。
+# 続きの説明
 
 # HttpListenerSample.mac の続きは実際の使い方の例になっています。
 
