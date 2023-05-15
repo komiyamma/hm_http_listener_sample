@@ -16,8 +16,8 @@ v9.22 である必要はないですが、v9.23以降どんどん非同期関数
   - 実行には hmV8 が必要です。https://xn--pckzexbx21r8q9b.net/?page=nobu_tool_hm_ecmascript
     - ダウンロードした後、zipのブロック解除(or 許可する)を忘れないで!!
 
-# HttpListner概要
-- HttpListnerを建てる関数を用意する。
+# HttpListener概要
+- HttpListenerを建てる関数を用意する。
 該当の関数は、概ね
 ```
   let port = hidemaru.createHttpListner( onPostRequestFunc, onTextRequestFunc, portMin );
@@ -88,7 +88,7 @@ function onTextRequestFunc(param) {
     return "エディタペインの文字列の長さ(wcs):" + hm.Edit.TotalText.length + "\r\n";
 }
 
-// 本題。 httpListnerの生成。JavaScriptから、
+// 本題。 httpListenerの生成。JavaScriptから、
 // ・POSTを受け取った時に処理する関数
 // ・普通のリクエスト受け取った時に表示するテキスト内容を返す関数を渡す。
 listner = createHttpListner(onPostRequestFunc, onTextRequestFunc);
@@ -100,7 +100,7 @@ port = listner.Start(7500, 20000);
 
 ```
 
-# createHttpListner まわり
+# createHttpListener まわり
 createHttpListner に対して、
 
    - POST処理が来た時用の関数と、
@@ -115,7 +115,7 @@ createHttpListner に対して、
 function onPostRequestFunc(text: string): number | undefined
 ```
 
-HttpListnerにPOST要求が来た時、この関数が呼ばれる。
+HttpListenerにPOST要求が来た時、この関数が呼ばれる。
 textにはPOSTで送られてきたもの(がテキストであるという前提で)、渡される。
 返り値は「ステータス番号」、何も返さなければ原則200となる。
 
@@ -125,7 +125,7 @@ textにはPOSTで送られてきたもの(がテキストであるという前�
 function onTextRequestFunc(param: string): string
 ```
 
-HttpListnerにPOST意外の要求(まぁ普通のGETリクエスト想定)が来た時、この関数が呼ばれる。
+HttpListenerにPOST意外の要求(まぁ普通のGETリクエスト想定)が来た時、この関数が呼ばれる。
 普通に何らかの文字列を返す。
 param に 何かステータスを伝えるためのシンボル的なものを渡すことで、
 返す文字列を切り替えるといった目的に使える。
