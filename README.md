@@ -1,9 +1,11 @@
-# localhost:7000(IPアドレスは利用されていないところ)　でのシンプルなHttpListnerを建てる関数を用意してはどうでしょうか。
+# localhost:7500(空きポート)での<br>シンプルなHttpListnerを建てる関数を用意してはどうでしょうか。
 
 # それ作るとどんな感じになるの？
 - ちょっと具体的に動作するサンプルを hmV8 を絡めて作ってみました。
 秀丸にHttpListener案を取り入れるしたとしたら、「JavaScript」と「ネイティブ」の境界線が似た感じになるであろう
 hmV8で作るとイメージが掴みやすいかと思ったので。
+
+![イメージ](readme.png "イメージ")
 
 # 場所
   - https://github.com/komiyamma/hm_http_listener_sample/releases の HttpListenerSample.zip
@@ -191,19 +193,21 @@ javascriptで設定した、「onPostRequestFunc」を呼び出すためのも�
 
 ## GetAvailablePort
 
-- 指定された最小Port番号以上、最大Port番号までで「空いている」ポートを返す。
-　ユーザーが要求するポートが実際に利用可能とは限らないので、これに近いようなアルゴリズムで
-　使用可能なポート番号を返す必要がある。
+- 指定された最小Port番号以上、最大Port番号までで「空いている」ポートを返す。  
+ユーザーが要求するポートが実際に利用可能とは限らないので、これに近いようなアルゴリズムで  
+使用可能なポート番号を返す必要がある。
 
 ## 異なるポートや異なるプロトコルからアクセスされるとわかっているので、
+
 - HttpListenerContext context = listener.GetContext();
+
 ```
   context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
 ```
-　ここが懸念点であろうから、接続元(fetchやXMLHttpRequest().sendなどを発行する側)となるURLを file:/// か http://localhost or http://127.0.0.1 に
-　縛っても良いかもしれない。
+ここが懸念点であろうから、接続元(fetchやXMLHttpRequest().sendなどを発行する側)となるURLを file:/// か http://localhost or http://127.0.0.1 に
+縛っても良いかもしれない。
 
-　あるいは、そういったフィルターはユーザーにまかせても良いかもしれない。
+あるいは、そういったフィルターはユーザーにまかせても良いかもしれない。
 
 ## POSTリクエスト
 
