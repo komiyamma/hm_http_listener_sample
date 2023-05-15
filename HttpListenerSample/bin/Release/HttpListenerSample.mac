@@ -17,19 +17,11 @@ if ( !#V8 ) { message "hmV8.dllが読み込めない"; }
 // postRefuncをtextを引数として呼び出す、返り値には、ステータスを返すことも出来る(返さなければ200)
 // 普通のリクエストの際は、文字列を返す関数のtextReqFuncを呼び出す。
 function createHttpListner(postReqFunc, textReqFunc) {
-	let lib = host.lib(currentmacrodirectory() + "\\HttpListenerSample.dll");
+    let lib = host.lib(currentmacrodirectory() + "\\HttpListenerSample.dll");
     return new lib.HttpListnerSample(postReqFunc, textReqFunc);
 }
 """"""""""""""""""""""""""""""""""""""""""""""""""
 );
-
-
-
-
-
-
-
-
 
 
 #r = dllfuncw( #V8, "DoString", 
@@ -89,6 +81,18 @@ port = listner.Start(7500, 20000);
 // 本題とは無関係。v8⇒マクロ空間へ
 setVar("#PORT", port);
 
+// このプロセスが閉じた際、手動の解放処理が行える。JavaScriptにデストラクタが無いことを埋めるための、hmV8独自機能。
+function DestroyScope() {
+    if (listner) {
+        // 再実行した際に前回分を破棄しているだけ。
+        listner.Close();
+        port = 0;
+        count = 0;
+        hm.debuginfo("解放しました"); // デバッグモニターへの出力。
+                                      // アウトプット枠への出力は「編集域閉じてる」が先に判定が走るのか機能しないためOutputDebugStringで
+    }
+}
+
 """"""""""""""""""""""""""""""""""""""""""""""""""
 );
 
@@ -105,13 +109,21 @@ jsmode "WebView2";
 
 js {
 
-
-
 debuginfo(2);
 
 var port = getVar("#PORT");
 
 let target_html_file = currentmacrodirectory() + "\\HttpListenerSample.html";
+
+function winLocalPathToUri(path) {
+  var uri = "file:///";
+  uri += path.replace(/\\/g, "/");
+  return encodeURI(uri);
+}
+
+target_html_file = winLocalPathToUri(target_html_file);
+
+
 
 let target_browser = "_each";
 let target_browser_size = 300;
@@ -230,7 +242,7 @@ async function initBrowserPane() {
     browserpanecommand(
         {
             target: target_browser,
-            url: target_html_file,
+            url: target_html_file + `?port=${port}`,
             show: 1,
             size: target_browser_size
         }
@@ -252,7 +264,5 @@ async function initBrowserPane() {
 initBrowserPane();
 
 timerHandle = hidemaru.setInterval(tickMethod, 1000);
-
-
 
 }
