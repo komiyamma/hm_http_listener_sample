@@ -207,12 +207,13 @@ javascriptで設定した、「onPostRequestFunc」を呼び出すためのも�
 
 ## 異なるポートや異なるプロトコルからアクセスされるとわかっているので、
 
-- HttpListenerContext context = listener.GetContext();
+```
+HttpListenerContext context = listener.GetContext();  context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+```
+ここが懸念点であろうから、接続元(fetchやXMLHttpRequest().sendなどを発行する側)となるURLを
+- file:/// か
+- http://localhost or http://127.0.0.1 に
 
-```
-  context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-```
-ここが懸念点であろうから、接続元(fetchやXMLHttpRequest().sendなどを発行する側)となるURLを file:/// か http://localhost or http://127.0.0.1 に
 縛っても良いかもしれない。
 
 あるいは、そういったフィルターはユーザーにまかせても良いかもしれない。
