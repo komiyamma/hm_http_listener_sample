@@ -79,7 +79,7 @@ function onPostRequestFunc(text) {
     return 201;
 }
 
-// テキストを要求する関数。POST意外は基本これを渡す。
+// テキストを要求する関数。POST以外は基本これを渡す。
 // ようするに、javascriptエンジンから、ブラウザ枠へと値を伝達するためのもの。
 function onTextRequestFunc(param) {
     if (param) {
@@ -104,7 +104,7 @@ port = listner.Start(7500, 20000);
 createHttpListner に対して、
 
    - POST処理が来た時用の関数と、
-   - 普通にGETが来た時ようの関数
+   - 普通にGETが来た時用の関数
    - このポート番号で繋げたいという番号
 
 などを渡してもらい、実際に接続したポートを返す。  
@@ -125,7 +125,7 @@ textにはPOSTで送られてきたもの(がテキストであるという前�
 function onTextRequestFunc(param: string): string
 ```
 
-HttpListenerにPOST意外の要求(まぁ普通のGETリクエスト想定)が来た時、この関数が呼ばれる。  
+HttpListenerにPOST以外の要求(まぁ普通のGETリクエスト想定)が来た時、この関数が呼ばれる。  
 普通に何らかの文字列を返す。  
 param に 何かステータスを伝えるためのシンボル的なものを渡すことで、  
 返す文字列を切り替えるといった目的に使える。  
@@ -249,9 +249,9 @@ if (request.HttpMethod == "POST") {
     ...
 ```
 
-今回は「文字列意外扱えても微妙だし、文字列だけでいいでしょ」とした。  
+今回は「文字列以外扱えても微妙だし、文字列だけでいいでしょ」とした。  
 
-## それ意外のリクエスト
+## それ以外のリクエスト
 
 ```
     string hm_param = "";

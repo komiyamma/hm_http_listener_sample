@@ -59,7 +59,7 @@ function onPostRequestFunc(text) {
     return 201;
 }
 
-// テキストを要求する関数。POST意外は基本これを渡す。
+// テキストを要求する関数。POST以外は基本これを渡す。
 // ようするに、javascriptエンジンから、ブラウザ枠へと値を伝達するためのもの。
 function onTextRequestFunc(param) {
     if (param) {
