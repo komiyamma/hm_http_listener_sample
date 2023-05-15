@@ -115,6 +115,7 @@ public class HttpListnerSample
 
                     HttpListenerRequest request = context.Request;
 
+                    Trace.WriteLine("★接続元のURL:" + request.Url + "\n");
 
                     // リクエストのHTTPメソッドがPOSTである場合のみ、リクエストボディからデータを読み取る
                     if (request.HttpMethod == "POST")
