@@ -9,12 +9,14 @@ v9.22 である必要はないですが、v9.23以降どんどん非同期関数
 イメージが掴みやすいかと思ったからです。  
 
 ![イメージ](readme.png "イメージ")
+:laugh:
 
 # 場所
   - https://github.com/komiyamma/hm_http_listener_sample/releases の HttpListenerSample.zip
     - ダウンロードした後、zipのブロック解除(or 許可する)を忘れないで!!
   - 実行には hmV8 が必要です。https://xn--pckzexbx21r8q9b.net/?page=nobu_tool_hm_ecmascript
     - ダウンロードした後、zipのブロック解除(or 許可する)を忘れないで!!
+
 
 # HttpListener概要
 - HttpListenerを建てる関数を用意する。
@@ -31,7 +33,6 @@ v9.22 である必要はないですが、v9.23以降どんどん非同期関数
 - その記述方法は特定のWebコンポーネントに依存しません。ユーザーが作成する記述がWebViewコンポーネントに大きく依存する
 といったことはありません。  
 それらは全く同じスクリプト記述となります。
-
 
 # サンプルの実行
   - HttpListenerSample.zip を ブロック解除した後、解凍すると、
