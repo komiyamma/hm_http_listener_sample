@@ -113,17 +113,10 @@ debuginfo(2);
 
 var port = getVar("#PORT");
 
-let target_html_file = currentmacrodirectory() + "\\HttpListenerSample.html";
-
-function winLocalPathToUri(path) {
-  var uri = "file:///";
-  uri += path.replace(/\\/g, "/");
-  return encodeURI(uri);
-}
-
-target_html_file = winLocalPathToUri(target_html_file);
-
-
+// この段階で、WindowsのPath形式からfile:/// 形式にしておく。
+// browserpanecommand で クエリパラメータを付ける際に、WindowsのPath形式のままでは
+// urlencodeが全体に対してかかってしまうため。それを防止する。
+let target_html_file = new URL(currentmacrodirectory() + "\\HttpListenerSample.html");
 
 let target_browser = "_each";
 let target_browser_size = 300;
