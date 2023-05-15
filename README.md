@@ -245,9 +245,11 @@ if (request.HttpMethod == "POST") {
 ```
     string hm_param = "";
     // GETパラメータを処理する
+    ... 
+```
 
-    ... (今回は "param=****" という"param"というクエリーキーがあれば、その値を onTextRequestFunc に渡すようにしたが、クエリパラメータ全体をjsonオブジェクト形式にしてhm_param として渡しても良いかも
-
+今回は "param=****" という"param"というクエリーキーがあれば、その値を onTextRequestFunc に渡すようにしたが、クエリパラメータ全体をjsonオブジェクト形式にしてhm_param として渡しても良いかも
+```
 
     // HTMLを表示する
     if (request != null)
@@ -256,3 +258,4 @@ if (request.HttpMethod == "POST") {
         byte[] text = Encoding.UTF8.GetBytes(hmtext);
         response.ContentType = "text/plain; charset=utf-8";
 
+```
