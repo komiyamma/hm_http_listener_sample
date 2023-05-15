@@ -4,6 +4,7 @@
 </head>
 <body>
 <script>
+// このportで秀丸のJavaScriptエンジンのHttpListenerと接続する
 let global_port = 0;
 
 window.onload = function() {
@@ -18,7 +19,8 @@ window.onload = function() {
 	    }
 
 	    else {
-			// デバッグ用。外部ブラウザなどでURIからglobal_portにポート番号を代入するため。
+			// URIの?port=7500といったようにポート番号はgetで渡している。
+            // これは秀丸の内部ブラウザだけでなく、外部ブラウザでも同様の挙動に出来るため。
 			let url = new URL(window.location.href);
 
 			// URLSearchParamsオブジェクトを取得
