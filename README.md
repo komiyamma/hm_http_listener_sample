@@ -258,5 +258,6 @@ if (request.HttpMethod == "POST") {
         string hmtext = this.onTextRequestFunc(hm_param);
         byte[] text = Encoding.UTF8.GetBytes(hmtext);
         response.ContentType = "text/plain; charset=utf-8";
-
+        response.ContentEncoding = Encoding.UTF8;
+        response.OutputStream.Write(text, 0, text.Length);
 ```
