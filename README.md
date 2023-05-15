@@ -223,7 +223,7 @@ context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
 Trace.WriteLine("★接続元のURL:" + request.Url + "\n");
 ```
 
-のrequest.Urlには、http://localhost:7500/xxxxx や file:///c:xxxx などと 呼び出し元のURLが入っているので、  
+のrequest.Urlには、http://localhost:7500/xxxxx や file:///c:/xxxx などと 呼び出し元のURLが入っているので、  
 その文字列で「ローカル同士の接続」を担保してしまえば、預かり知らぬインターネットURLにアクセスしたら、  
 そこに、JavaScriptでlocalhost:**** のポートがたまたま一致する読み取り記述がされており、  
 表示文字列をネット上へと送信されてしまった、などといった(まぁほとんど起こり得ないのだが、理論上起こすことが可能な)セキュリティホーム的な何かは防げる。  
