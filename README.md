@@ -272,3 +272,33 @@ if (request.HttpMethod == "POST") {
         response.ContentEncoding = Encoding.UTF8;
         response.OutputStream.Write(text, 0, text.Length);
 ```
+
+# この実装方法のメリットは何？
+
+これの良い点はそれが非常に「汎用的な通信手段」である、という点でしょう。  
+  
+汎用的であるがゆえに、個別ブラウザ枠に表示されたURLを、  
+そのまま、適当な(Chrome/Edge/Firefox他)で表示しても、  
+同じように秀丸と双方向に通信するのがわかります。  
+  
+これはWebコンポーネントを持つ技術と汎用的にお手軽に通信できることを示します。  
+
+- WebView2
+- nodejs
+- .NET HttpClient (VS/VSC/Unityなども含む)
+- Blazor
+- MAUI
+- python / http系
+- ruby / http系
+
+他、ありとあらゆるWebテクノロジーを内包するものと通信がしやすい方法だと言えます。
+
+runProcessのように新規に起動することを前提としたものではなく、
+portさえ伝達されればどちらが先に起動していても良い点が味噌でしょう。
+
+これは
+
+- GUI同士でも連携しやすい
+- Webクライアント/サーバー的性質を持つソフトと連携しやすい
+
+ということを意味します。
