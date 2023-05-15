@@ -25,7 +25,7 @@ window.onload = function() {
 			let params = url.searchParams;
 
 			// getメソッド
-			global_port = params.get('port');
+			let port = params.get('port');
 	    }
     } catch(e) {
     }
@@ -124,7 +124,7 @@ function postToServer() {
 <h3>↓ブラウザ枠⇒エディタ側のjavascriptへ</h3>
 <button id="sendData" onclick="postToServer()">送信</button>
 <br>
-<input type="text" id="inputData" value="ここになんか入力"></input>
+<input id="inputData" type="text" value="ここになんか入力"></input>
 <br>
 <br>
 </body>

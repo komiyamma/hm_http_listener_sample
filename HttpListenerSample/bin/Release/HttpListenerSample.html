@@ -25,7 +25,9 @@ window.onload = function() {
 			let params = url.searchParams;
 
 			// getメソッド
-			global_port = params.get('port');
+			let port = params.get('port');
+            
+            initPort(port);
 	    }
     } catch(e) {
     }

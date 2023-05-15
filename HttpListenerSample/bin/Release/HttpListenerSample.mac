@@ -249,7 +249,7 @@ async function initBrowserPane() {
     );
 
     await sleep_in_tick(600);
-
+/*
     // ポート番号の伝達
     browserpanecommand(
         {
@@ -258,6 +258,7 @@ async function initBrowserPane() {
             size: target_browser_size
         }
     );
+*/
 }
 
 // ここ await していないので、次のsetIntervalの後に跨がないように注意
